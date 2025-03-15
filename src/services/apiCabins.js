@@ -1,13 +1,15 @@
-import { data } from "react-router-dom"
+import supabase from "./supabase";
 
 export async function getCabins(){
     
-    let { data: cabins, error } = await supabase
+    let { data, error } = await supabase
     .from('cabins')
     .select('*')
     if(error){
         console.log("Error in Cabins");
         throw new Error("Error")
     }
+    console.log(data);
+    
     return data
 }
