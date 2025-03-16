@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 import { HiPencil, HiTrash, HiSquare2Stack } from 'react-icons/hi2';
-
-
-// import { formatCurrency } from 'utils/helpers';
-// import { useDeleteCabin } from './useDeleteCabin';
-// import { useCreateCabin } from './useCreateCabin';
-// import CreateCabinForm from './CreateCabinForm';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DeleteCabin } from '../../services/apiCabins';
 
 
 const Img = styled.img`
@@ -62,17 +58,17 @@ function CabinRow({ cabin }) {
   } = cabin;
 
 
-  // function handleDuplicate() {
-  //   createCabin({
-  //     name: `${name} duplicate`,
-  //     maxCapacity,
-  //     regularPrice,
-  //     discount,
-  //     image,
-  //     description,
-  //   });
-  // }
+  const queryClient = useQueryClient()
 
+  const {mutate , isLoading} = useMutation({
+    mutationFn : (id) => DeleteCabin(id),
+    onSuccess : () =>{
+    queryClient.invalidateQueries({
+      queryKey : ["cabin"]
+    })
+    }
+    })
+  
   return (
     <StyledTableRow>
       <Img src={image} />
@@ -80,7 +76,7 @@ function CabinRow({ cabin }) {
       <div>Fits up to {maxCapacity}</div>
       <Price>{reqularPrice}</Price>
       <Discount>{discount}</Discount>
-
+      <div><button disabled={isLoading} onClick={() => mutate(cabinId)}>Delete</button></div>
     </StyledTableRow>
   );
 }
