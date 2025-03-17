@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { HiPencil, HiTrash, HiSquare2Stack } from 'react-icons/hi2';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteCabin } from '../../services/apiCabins';
+import toast from 'react-hot-toast';
 
 
 const Img = styled.img`
@@ -64,8 +65,12 @@ function CabinRow({ cabin }) {
     mutationFn : (id) => DeleteCabin(id),
     onSuccess : () =>{
     queryClient.invalidateQueries({
-      queryKey : ["cabin"]
-    })
+    queryKey : ["cabin"],
+    }),
+    toast.success("success deleted")
+    },
+    onError : () =>{
+      toast.error("Error !")
     }
     })
   
