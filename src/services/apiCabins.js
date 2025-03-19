@@ -8,9 +8,7 @@ export async function getCabins(){
     if(error){
         console.log("Error in Cabins");
         throw new Error("Error")
-    }
-    console.log(data);
-    
+    }    
     return data
 }
 

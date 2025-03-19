@@ -35,11 +35,7 @@ function CabinTable() {
   const { data , isLoading , error , status} = useQuery({
     queryKey : ["cabin"],
     queryFn : getCabins,     
-  })
-
-  
-  console.log(status);
-  
+  })  
   
   return (
    <StyledTable role="table">

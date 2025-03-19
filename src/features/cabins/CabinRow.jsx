@@ -46,7 +46,6 @@ const StyledTableRow = styled.div`
 `
 
 function CabinRow({ cabin }) {
-  console.log(cabin);
   
   const {
     id: cabinId,
