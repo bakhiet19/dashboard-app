@@ -5,6 +5,9 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import { Textarea } from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createCabin } from '../../services/apiCabins';
+import toast from 'react-hot-toast';
 
 // We use react-hook-form to make working with complex and REAL-WORLD forms a lot easier. It handles stuff like user validation and errors. manages the form state for us, etc
 // Validating the user’s data passed through the form is a crucial responsibility for a developer.
@@ -13,10 +16,28 @@ import { useForm } from 'react-hook-form';
 // Receives closeModal directly from Modal
 function CreateCabinForm() {
 
-  const {register , handleSubmit } = useForm()
+  const {register , handleSubmit , reset } = useForm()
+
+  const queryClient = useQueryClient()
+
+  const {mutate , isLoading} = useMutation({
+    mutationFn : createCabin,
+    onSuccess : () => {
+      toast.success("New CAbin Successfully created");
+      queryClient.invalidateQueries({
+        queryKey : ["cabin"]
+      });
+      reset();
+    },
+    onError : () => {
+      toast.error("Error")
+    }
+  })
+ 
+  
 
   function onSubmit(data){
-    console.log(data);
+    mutate(data)
     
   }
 
@@ -41,7 +62,7 @@ function CreateCabinForm() {
       <FormRow label='Regular price'>
         <Input
           type='number'
-          id='regularPrice'
+          id='reqularPrice'
           {...register("reqularPrice")}
          />
       </FormRow>
@@ -78,7 +99,7 @@ function CreateCabinForm() {
           type='reset'>
           Cancel
         </Button>
-        <Button>
+        <Button disabled={isLoading}>
          Create
         </Button>
       </FormRow>
