@@ -16,8 +16,10 @@ import toast from 'react-hot-toast';
 // Receives closeModal directly from Modal
 function CreateCabinForm() {
 
-  const {register , handleSubmit , reset } = useForm()
-
+  const {register , handleSubmit , reset , getValues , formState } = useForm()
+  const {errors} = formState
+  console.log(formState.errors.name);
+  
   const queryClient = useQueryClient()
 
   const {mutate , isLoading} = useMutation({
@@ -41,38 +43,55 @@ function CreateCabinForm() {
     
   }
 
+  function onError(err){
+    console.log(err);
+    
+  }
+
   return (
-    <Form type='modal' onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label='Cabin name'>
+    <Form type='modal' onSubmit={handleSubmit(onSubmit , onError)}>
+      <FormRow label='Cabin name' error={errors?.name?.message}>
         <Input
+        defaultValue=""
           type='text'
           id='name'
-          {...register("name")}
+          {...register("name" , {
+            required : "This Field Is Required", 
+          })}
         />
+        {/* {errors?.name?.message && <p>hello</p>} */}
       </FormRow>
 
-      <FormRow label='Maximum capacity'>
+      <FormRow label='Maximum capacity' error={errors?.maxCapacity?.message}>
         <Input
           type='number'
           id='maxCapacity'
-          {...register("maxCapacity")}
+          {...register("maxCapacity" , {
+            required : "This Field Is Required",
+           
+          })}
         />
       </FormRow>
 
-      <FormRow label='Regular price'>
+      <FormRow label='Regular price' error={errors?.reqularPrice?.message}>
         <Input
           type='number'
           id='reqularPrice'
-          {...register("reqularPrice")}
+          {...register("reqularPrice" , {
+            required : "This Field Is Required"
+          })}
          />
       </FormRow>
 
-      <FormRow label='Discount'>
+      <FormRow label='Discount' error={errors?.discount?.message}>
         <Input
           type='number'
           id='discount'
           defaultValue={0}
-          {...register("discount")}
+          {...register("discount", {
+            required : "This Field Is Required",
+            validate : (value) => value <= getValues().reqularPrice || "Discount should be less than reqular price"
+          })}
         />
       </FormRow>
 
