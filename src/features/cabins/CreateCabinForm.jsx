@@ -5,17 +5,13 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import { Textarea } from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createEditCabin } from '../../services/apiCabins';
-import toast from 'react-hot-toast';
+import { useCreateCabinForm } from './useCreateCabinForm';
 
-// We use react-hook-form to make working with complex and REAL-WORLD forms a lot easier. It handles stuff like user validation and errors. manages the form state for us, etc
-// Validating the user’s data passed through the form is a crucial responsibility for a developer.
-// React Hook Form takes a slightly different approach than other form libraries in the React ecosystem by adopting the use of uncontrolled inputs using ref instead of depending on the state to control the inputs. This approach makes the forms more performant and reduces the number of re-renders.
 
-// Receives closeModal directly from Modal
 function CreateCabinForm({cabinToEdit = {}}) {
 
+  const {editCabin , isEditing} = useCreateCabinForm()
+  
   const {id : editId , ...editValues} = cabinToEdit
   const IsEDitSession = Boolean(editId)
   const {register , handleSubmit , reset , getValues , formState } = useForm({
@@ -23,37 +19,7 @@ function CreateCabinForm({cabinToEdit = {}}) {
   })
   const {errors} = formState
   
-  const queryClient = useQueryClient()
-
-  const {mutate : createCabin , isLoading : isCreating} = useMutation({
-    mutationFn : createEditCabin,
-    onSuccess : () => {
-      toast.success("New Cabin Successfully created");
-      queryClient.invalidateQueries({
-        queryKey : ["cabin"]
-      });
-      reset();
-    },
-    onError : () => {
-      toast.error("Error")
-    }
-  })
-
-  const {mutate : editCabin , isLoading :  isEditing} = useMutation({
-    mutationFn : ({newCabin , id}) => createEditCabin(newCabin , id),
-    onSuccess : () => {
-      toast.success("Success Editing");
-      queryClient.invalidateQueries({
-        queryKey : ["cabin"]
-      });
-      reset();
-    },
-    onError : () => {
-      toast.error("Error")
-    }
-  })
- 
-  const isWorking = isCreating || isEditing
+  // const isWorking = isCreating || isEditing
 
   function onSubmit(data){ 
     const imageName = data.image?.[0]?.name || "";

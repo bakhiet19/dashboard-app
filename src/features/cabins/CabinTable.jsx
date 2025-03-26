@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { getCabins } from "../../services/apiCabins";
 import CabinRow from "./CabinRow";
+import useCabins from "./useCabins";
 
 
 const StyledTable = styled.div`
@@ -32,11 +33,10 @@ const StyledHeader = styled.header`
 
 function CabinTable() {
 
-  const { data , isLoading , error , status} = useQuery({
-    queryKey : ["cabin"],
-    queryFn : getCabins,     
-  })  
-  
+  const { data , isLoading , error , status} = useCabins()
+
+
+
   return (
    <StyledTable role="table">
     <StyledHeader role="row">

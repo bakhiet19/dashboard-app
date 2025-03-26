@@ -1,10 +1,7 @@
 import styled from 'styled-components';
-import { HiPencil, HiTrash, HiSquare2Stack } from 'react-icons/hi2';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DeleteCabin } from '../../services/apiCabins';
-import toast from 'react-hot-toast';
 import { useState } from 'react';
 import CreateCabinForm from './CreateCabinForm';
+import { useDeleteCabin } from './useDeleteCabin';
 
 
 const Img = styled.img`
@@ -54,7 +51,9 @@ const StyledButton = styled.button`
 function CabinRow({ cabin }) {
 
   const [showForm , setShowForm] = useState(false)
-  
+  const {isLoading , deleteCabin} = useDeleteCabin()  
+
+
   const {
     id: cabinId,
     name,
@@ -66,21 +65,7 @@ function CabinRow({ cabin }) {
   } = cabin;
 
 
-  const queryClient = useQueryClient()
-
-  const {mutate , isLoading} = useMutation({
-    mutationFn : (id) => DeleteCabin(id),
-    onSuccess : () =>{
-    queryClient.invalidateQueries({
-    queryKey : ["cabin"],
-    }),
-    toast.success("success deleted")
-    },
-    onError : () =>{
-      toast.error("Error !")
-    }
-    })
-  
+ 
   return (
     <>
     <StyledTableRow>
@@ -90,7 +75,7 @@ function CabinRow({ cabin }) {
       <Price>{reqularPrice}</Price> 
       <Discount>{discount}</Discount>
       <div style={{display : "flex" , justifyContent : "space-around"}}>
-      <StyledButton disabled={isLoading} onClick={() => mutate(cabinId)}>Delete</StyledButton>
+      <StyledButton disabled={isLoading} onClick={() => deleteCabin(cabinId)}>Delete</StyledButton>
       <StyledButton onClick={() => setShowForm((form) => ! form)}>Edit</StyledButton>
       </div>
     </StyledTableRow>
