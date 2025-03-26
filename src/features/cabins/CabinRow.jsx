@@ -3,6 +3,8 @@ import { HiPencil, HiTrash, HiSquare2Stack } from 'react-icons/hi2';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
+import CreateCabinForm from './CreateCabinForm';
 
 
 const Img = styled.img`
@@ -45,7 +47,13 @@ const StyledTableRow = styled.div`
   }
 `
 
+const StyledButton = styled.button`
+  padding: 6px 12px;
+`
+
 function CabinRow({ cabin }) {
+
+  const [showForm , setShowForm] = useState(false)
   
   const {
     id: cabinId,
@@ -74,14 +82,20 @@ function CabinRow({ cabin }) {
     })
   
   return (
+    <>
     <StyledTableRow>
       <Img src={image} />
       <Cabin>{name}</Cabin>
       <div>Fits up to {maxCapacity}</div>
-      <Price>{reqularPrice}</Price>
+      <Price>{reqularPrice}</Price> 
       <Discount>{discount}</Discount>
-      <div><button disabled={isLoading} onClick={() => mutate(cabinId)}>Delete</button></div>
+      <div style={{display : "flex" , justifyContent : "space-around"}}>
+      <StyledButton disabled={isLoading} onClick={() => mutate(cabinId)}>Delete</StyledButton>
+      <StyledButton onClick={() => setShowForm((form) => ! form)}>Edit</StyledButton>
+      </div>
     </StyledTableRow>
+    {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
   );
 }
 

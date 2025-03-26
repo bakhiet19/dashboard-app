@@ -17,10 +17,11 @@ const Main = styled.main`
 
   const Container = styled.div`
   max-width: 120rem ;
-  margin: 0 auto;
+  margin: 10px auto;
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  /* padding: 10px 20px; */
   `
 
 function AppLayout() {

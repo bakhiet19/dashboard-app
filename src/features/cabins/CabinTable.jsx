@@ -6,7 +6,7 @@ import CabinRow from "./CabinRow";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
-
+  padding: 10px;
   font-size: 1.4rem;
   background-color: var(--color-grey-0);
   border-radius: 7px;

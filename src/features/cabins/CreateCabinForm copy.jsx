@@ -6,7 +6,7 @@ import FileInput from '../../ui/FileInput';
 import { Textarea } from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createEditCabin } from '../../services/apiCabins';
+import { createCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
 
 // We use react-hook-form to make working with complex and REAL-WORLD forms a lot easier. It handles stuff like user validation and errors. manages the form state for us, etc
@@ -14,35 +14,17 @@ import toast from 'react-hot-toast';
 // React Hook Form takes a slightly different approach than other form libraries in the React ecosystem by adopting the use of uncontrolled inputs using ref instead of depending on the state to control the inputs. This approach makes the forms more performant and reduces the number of re-renders.
 
 // Receives closeModal directly from Modal
-function CreateCabinForm({cabinToEdit = {}}) {
+function CreateCabinForm({cabinToEdit}) {
 
-  const {id : editId , ...editValues} = cabinToEdit
-  const IsEDitSession = Boolean(editId)
-  const {register , handleSubmit , reset , getValues , formState } = useForm({
-    defaultValues : IsEDitSession ? editValues : {}
-  })
+  const {register , handleSubmit , reset , getValues , formState } = useForm()
   const {errors} = formState
   
   const queryClient = useQueryClient()
 
-  const {mutate : createCabin , isLoading : isCreating} = useMutation({
-    mutationFn : createEditCabin,
+  const {mutate , isLoading} = useMutation({
+    mutationFn : createCabin,
     onSuccess : () => {
-      toast.success("New Cabin Successfully created");
-      queryClient.invalidateQueries({
-        queryKey : ["cabin"]
-      });
-      reset();
-    },
-    onError : () => {
-      toast.error("Error")
-    }
-  })
-
-  const {mutate : editCabin , isLoading :  isEditing} = useMutation({
-    mutationFn : ({newCabin , id}) => createEditCabin(newCabin , id),
-    onSuccess : () => {
-      toast.success("Success Editing");
+      toast.success("New CAbin Successfully created");
       queryClient.invalidateQueries({
         queryKey : ["cabin"]
       });
@@ -53,21 +35,13 @@ function CreateCabinForm({cabinToEdit = {}}) {
     }
   })
  
-  const isWorking = isCreating || isEditing
+  
 
   function onSubmit(data){ 
-    const imageName = data.image?.[0]?.name || "";
-
-    const image = typeof data.image === "string" ? data.image : data.image[0]
-
-    if(IsEDitSession)
-      editCabin({newCabin : {...data , image} , id : editId})
-    else{
-      createCabin({...data, image: image});
-    }
+     mutate({...data , image : data.image[0].name});
+    // (data)
     
   }
-  
 
   function onError(err){
     console.log(err);
@@ -135,9 +109,7 @@ function CreateCabinForm({cabinToEdit = {}}) {
         <FileInput
           id='image'
           type='file'
-          {...register("image", {
-            required : IsEDitSession ? false : "This Field is Required"
-           })}
+          {...register("image")}
           />
          
       </FormRow>
@@ -149,8 +121,8 @@ function CreateCabinForm({cabinToEdit = {}}) {
           type='reset'>
           Cancel
         </Button>
-        <Button disabled={isEditing}>
-         {IsEDitSession ? "Edit Session" : "Create"}
+        <Button disabled={isLoading}>
+         Create
         </Button>
       </FormRow>
     </Form>
