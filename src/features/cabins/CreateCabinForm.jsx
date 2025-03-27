@@ -5,12 +5,14 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import { Textarea } from '../../ui/Textarea';
 import { useForm } from 'react-hook-form';
+import { useEditCabinForm } from './useEditCabinForm';
 import { useCreateCabinForm } from './useCreateCabinForm';
 
 
 function CreateCabinForm({cabinToEdit = {}}) {
 
-  const {editCabin , isEditing} = useCreateCabinForm()
+  const {editCabin , isEditing} = useEditCabinForm()
+  const {createCabin , isCreating} = useCreateCabinForm()
   
   const {id : editId , ...editValues} = cabinToEdit
   const IsEDitSession = Boolean(editId)
@@ -19,7 +21,7 @@ function CreateCabinForm({cabinToEdit = {}}) {
   })
   const {errors} = formState
   
-  // const isWorking = isCreating || isEditing
+  const isWorking = isCreating || isEditing
 
   function onSubmit(data){ 
     const imageName = data.image?.[0]?.name || "";
