@@ -9,7 +9,7 @@ import { useEditCabinForm } from './useEditCabinForm';
 import { useCreateCabinForm } from './useCreateCabinForm';
 
 
-function CreateCabinForm({cabinToEdit = {}}) {
+function CreateCabinForm({cabinToEdit = {} , onClose={onClose}}) {
 
   const {editCabin , isEditing} = useEditCabinForm()
   const {createCabin , isCreating} = useCreateCabinForm()
@@ -113,6 +113,7 @@ function CreateCabinForm({cabinToEdit = {}}) {
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button
+          onClick={onClose}
           variation='secondary'
           type='reset'>
           Cancel
