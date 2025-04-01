@@ -26,7 +26,9 @@ import { useState } from 'react';
 
 
  export default function AddCAbin(){
-    return <Modal>
+    return(
+        <div>
+  <Modal>
       <Modal.Open opens="cabin-form">
         <Button>Add New Cabin</Button>
       </Modal.Open>
@@ -34,15 +36,18 @@ import { useState } from 'react';
           <CreateCabinForm />
         </Modal.Window>
 
-
+{/* 
         <Modal.Open opens="table">
         <Button>Show Table</Button>
       </Modal.Open>
         <Modal.Window name="table">
           <CabinTable />
-        </Modal.Window>
+        </Modal.Window> */}
       
     </Modal>
+        </div>
+      )
+  
   }
 
 

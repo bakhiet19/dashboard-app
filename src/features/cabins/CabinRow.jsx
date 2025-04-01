@@ -4,6 +4,9 @@ import CreateCabinForm from './CreateCabinForm';
 import { useDeleteCabin } from './useDeleteCabin';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
 import { useCreateCabinForm } from './useCreateCabinForm';
+import Modal from '../../ui/Modal';
+import ConfirmDelete from '../../ui/ConfirmDelete';
+import Table from '../../ui/Table';
 
 
 const Img = styled.img`
@@ -52,7 +55,6 @@ const StyledButton = styled.button`
 
 function CabinRow({ cabin }) {
 
-  const [showForm , setShowForm] = useState(false)
   const {isLoading , deleteCabin} = useDeleteCabin()  
   const {createCabin , isCreating} = useCreateCabinForm()
 
@@ -74,25 +76,40 @@ function CabinRow({ cabin }) {
     discount,
     image,
     description,
+    isDeleting
   } = cabin;
 
 
  
   return (
     <>
-    <StyledTableRow>
+    <Table.Row>
       <Img src={image} />
       <Cabin>{name}</Cabin>
       <div>Fits up to {maxCapacity}</div>
       <Price>{reqularPrice}</Price> 
       <Discount>{discount}</Discount>
       <div style={{display : "flex" , justifyContent : "space-around"}}>
-        <StyledButton onClick={handleDuplicate}> <HiSquare2Stack /> </StyledButton>
-      <StyledButton disabled={isLoading} onClick={() => deleteCabin(cabinId)}> <HiTrash /> </StyledButton>
-      <StyledButton onClick={() => setShowForm((form) => ! form)}> <HiPencil /> </StyledButton>
+      <StyledButton onClick={handleDuplicate}> <HiSquare2Stack /> </StyledButton>
+      <Modal>
+        
+      <Modal.Open opens="delete">
+         <StyledButton> <HiTrash /> </StyledButton>
+      </Modal.Open>
+      <Modal.Window name="delete">
+        <ConfirmDelete resource="cabins" disabled={isDeleting} onConfirm={() => deleteCabin(cabinId)} closeModal />
+
+      </Modal.Window>
+      <Modal.Open opens="edit">
+        <StyledButton> <HiPencil /> </StyledButton>
+      </Modal.Open>
+       <Modal.Window name="edit">
+       <CreateCabinForm cabinToEdit={cabin} />
+       </Modal.Window>
+      </Modal>
+   
       </div>
-    </StyledTableRow>
-    {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </Table.Row>
     </>
   );
 }

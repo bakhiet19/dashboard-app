@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { getCabins } from "../../services/apiCabins";
 import CabinRow from "./CabinRow";
 import useCabins from "./useCabins";
-import Table from "../../ui/Table";
 
 
 const StyledTable = styled.div`
@@ -16,20 +15,20 @@ const StyledTable = styled.div`
 `;
 
 
-// const StyledHeader = styled.header`
-//   display: grid;
-//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-//   column-gap: 2.4rem;
-//   align-items: center;
-//   padding: 1.6rem 2.4rem;
+const StyledHeader = styled.header`
+  display: grid;
+  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+  column-gap: 2.4rem;
+  align-items: center;
+  padding: 1.6rem 2.4rem;
 
-//   background-color: var(--color-grey-50);
-//   border-bottom: 1px solid var(--color-grey-100);
-//   text-transform: uppercase;
-//   letter-spacing: 0.4px;
-//   font-weight: 600;
-//   color: var(--color-grey-600);
-// `;
+  background-color: var(--color-grey-50);
+  border-bottom: 1px solid var(--color-grey-100);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+  color: var(--color-grey-600);
+`;
 
 
 function CabinTable() {
@@ -39,8 +38,8 @@ function CabinTable() {
 
 
   return (
-   <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
-    <Table.Header>
+   <StyledTable role="table">
+    <StyledHeader role="row">
       <div></div>
       <div>Cabin</div>
       <div>Capacity</div>
@@ -48,11 +47,11 @@ function CabinTable() {
       <div>Discount</div>
       <div></div>
    
-    </Table.Header>
+    </StyledHeader>
     {data && data.map((cabin) => {
         return <CabinRow key={cabin.id} cabin={cabin} />;
       })}
-   </Table>
+   </StyledTable>
   );
 }
 
