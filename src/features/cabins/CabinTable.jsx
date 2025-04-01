@@ -39,22 +39,25 @@ function CabinTable() {
 
 
   return (
-   <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
-    <Table.Header>
-      <div></div>
-      <div>Cabin</div>
-      <div>Capacity</div>
-      <div>Price</div>
-      <div>Discount</div>
-      <div></div>
-   
-    </Table.Header>
-    {data && data.map((cabin) => {
-        return <CabinRow key={cabin.id} cabin={cabin} />;
-      })}
-   </Table>
+    <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
+      <Table.Header>
+        <div></div>
+        <div>Cabin</div>
+        <div>Capacity</div>
+        <div>Price</div>
+        <div>Discount</div>
+        <div></div>
+      </Table.Header>
+  
+      {data && (
+        <Table.Body 
+          data={data} 
+          render={(cabin) => <CabinRow key={cabin.id} cabin={cabin} />}
+        />
+      )}
+    </Table>
   );
+  
 }
-
 
 export default CabinTable;

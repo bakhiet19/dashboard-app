@@ -78,9 +78,9 @@ function Row({children}){
   return <StyledRow role="row" columns={columns}>{children}</StyledRow>
 }
 
-function Body({children}){
+function Body({data , render}){
   const {columns} = useContext(TableContext)
-  return <StyledBody role="row" columns={columns}>{children}</StyledBody>
+  return <StyledBody role="row" columns={columns}>{data.map(render)}</StyledBody>
 }
 
 
