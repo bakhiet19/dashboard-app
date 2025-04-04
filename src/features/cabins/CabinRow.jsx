@@ -7,6 +7,7 @@ import { useCreateCabinForm } from './useCreateCabinForm';
 import Modal from '../../ui/Modal';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import Table from '../../ui/Table';
+import Menus from '../../ui/Menus';
 
 
 const Img = styled.img`
@@ -91,9 +92,36 @@ function CabinRow({ cabin }) {
       <Discount>{discount}</Discount>
       <div style={{display : "flex" , justifyContent : "space-around"}}>
       <StyledButton onClick={handleDuplicate}> <HiSquare2Stack /> </StyledButton>
+
+
       <Modal>
-        
-      <Modal.Open opens="delete">
+        <Menus.Menu>
+        <Menus.Toggle id={cabinId} />
+        <Menus.List id={cabinId}>
+        <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>Duplicate</Menus.Button>
+
+
+        <Modal.Open opens="edit">
+        <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+        </Modal.Open>
+
+        <Modal.Open opens="delete">
+        <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+       </Modal.Open>
+        </Menus.List>
+
+
+          </Menus.Menu>   
+
+        <Modal.Window name="delete">
+        <ConfirmDelete resource="cabins" disabled={isDeleting} onConfirm={() => deleteCabin(cabinId)} closeModal />
+        </Modal.Window>
+
+        <Modal.Window name="edit">
+       <CreateCabinForm cabinToEdit={cabin} />
+       </Modal.Window> 
+
+      {/* <Modal.Open opens="delete">
          <StyledButton> <HiTrash /> </StyledButton>
       </Modal.Open>
       <Modal.Window name="delete">
@@ -105,9 +133,24 @@ function CabinRow({ cabin }) {
       </Modal.Open>
        <Modal.Window name="edit">
        <CreateCabinForm cabinToEdit={cabin} />
-       </Modal.Window>
+       </Modal.Window> */}
       </Modal>
    
+    {/* <Menus.Menu>
+      <Menus.Toggle id={cabinId} />
+      <Menus.List id={cabinId}>
+        <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>Duplicate</Menus.Button>
+        <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+
+        <Modal.Open opens="delete">
+        <Menus.Button icon={<HiTrash />}> 
+      </Menus.Button>
+      </Modal.Open>
+
+      </Menus.List>
+    </Menus.Menu> */}
+
+
       </div>
     </Table.Row>
     </>
