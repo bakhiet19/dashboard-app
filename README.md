@@ -24,7 +24,7 @@ An interactive and responsive dashboard application built with React.js. This pr
 - **React Query**
 - **React Hook Form**
 - **React Icons**
-- (Optional) TypeScript – for better type safety and scalability
+
 
 ---
 
